@@ -129,9 +129,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     },
                   ),
-            // Tab 2: Favorit
-            const Center(child: Text('Belum ada kontak favorit')),
-          ],
+            // Tab 2: Favorit (Data Diri Kamu)
+            const ListTile(
+              leading: Icon(Icons.person, size: 36),
+              title: Text('M Naufal F'),
+              subtitle: Text('naufal@gmail.com\n081234567890'),
+              isThreeLine: true,
+            ),
+            ], // Penutup array children
         ),
         // FloatingActionButton
         floatingActionButton: FloatingActionButton(
