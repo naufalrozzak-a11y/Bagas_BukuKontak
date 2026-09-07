@@ -136,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                   ),
             // Tab 2: Favorit (Data Diri Kamu)
-            const ListTile(
+            ListTile(
               leading: CircleAvatar(
               child: Text(
                 item['nama'] != null && item['nama'].toString().isNotEmpty 
