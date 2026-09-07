@@ -7,6 +7,7 @@
 
 # The following line activates a set of recommended lints for Flutter apps,
 # packages, and plugins designed to encourage good coding practices.
+<<<<<<< HEAD
 analyzer:
   exclude:
     - build/**
@@ -16,6 +17,8 @@ analyzer:
     - windows/**
     - macos/**
     - linux/**
+=======
+>>>>>>> c1bbbba31c2074f9eda9fed62aea701a14e3e54e
 include: package:flutter_lints/flutter.yaml
 
 linter:

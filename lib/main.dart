@@ -12,10 +12,7 @@ class BukuKontakApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: true,
       title: 'Buku Kontak',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        useMaterial3: false,
-      ),
+      theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: false),
       initialRoute: '/',
       routes: {
         '/': (context) => const HomeScreen(),
@@ -40,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // List data kontak awal
   final List<Map<String, String>> _daftarKontak = [
     {
-      'nama': 'Annisa Kusumastuti',
+      'nama': 'Bagoes Vernanda',
       'email': 'nisa@gmail.com',
       'phone': '0895421903057',
     },
@@ -48,11 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _tambahKontak(String nama, String email, String phone) {
     setState(() {
-      _daftarKontak.add({
-        'nama': nama,
-        'email': email,
-        'phone': phone,
-      });
+      _daftarKontak.add({'nama': nama, 'email': email, 'phone': phone});
     });
   }
 
@@ -94,7 +87,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   Navigator.pop(context);
                   final result = await Navigator.pushNamed(context, '/tambah');
                   if (result != null && result is Map<String, String>) {
-                    _tambahKontak(result['nama']!, result['email']!, result['phone']!);
+                    _tambahKontak(
+                      result['nama']!,
+                      result['email']!,
+                      result['phone']!,
+                    );
                   }
                 },
               ),
@@ -132,11 +129,20 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     },
                   ),
-            // Tab 2: Favorit
-            const Center(
-              child: Text('Belum ada kontak favorit'),
+            // Tab 2: Favorit (Data Diri Kamu)
+            const ListTile(
+              leading: CircleAvatar(
+              child: Text(
+                item['nama'] != null && item['nama'].toString().isNotEmpty 
+                    ? item['nama'].toString()[0].toUpperCase() 
+                    : '?',
+              ),
             ),
-          ],
+              title: Text('M Naufal F'),
+              subtitle: Text('naufal@gmail.com\n081234567890'),
+              isThreeLine: true,
+            ),
+            ], // Penutup array children
         ),
         // FloatingActionButton
         floatingActionButton: FloatingActionButton(
@@ -144,7 +150,11 @@ class _HomeScreenState extends State<HomeScreen> {
           onPressed: () async {
             final result = await Navigator.pushNamed(context, '/tambah');
             if (result != null && result is Map<String, String>) {
-              _tambahKontak(result['nama']!, result['email']!, result['phone']!);
+              _tambahKontak(
+                result['nama']!,
+                result['email']!,
+                result['phone']!,
+              );
             }
           },
         ),
@@ -179,9 +189,7 @@ class _TambahKontakScreenState extends State<TambahKontakScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Tambah Kontak'),
-      ),
+      appBar: AppBar(title: const Text('Tambah Kontak')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -234,9 +242,7 @@ class TentangScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Tentang'),
-      ),
+      appBar: AppBar(title: const Text('Tentang')),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -248,7 +254,7 @@ class TentangScreen extends StatelessWidget {
             ),
             SizedBox(height: 20),
             Text(
-              'Annisa Kusumastuti',
+              'Bagoes Vernanda',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 8),
@@ -260,4 +266,4 @@ class TentangScreen extends StatelessWidget {
       ),
     );
   }
-} 
+}
