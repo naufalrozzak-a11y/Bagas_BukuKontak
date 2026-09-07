@@ -122,7 +122,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemBuilder: (context, index) {
                       final item = _daftarKontak[index];
                       return ListTile(
-                        leading: const Icon(Icons.person, size: 36),
+                        leading: CircleAvatar(
+                          child: Text(
+                            item['nama'] != null && item['nama'].toString().isNotEmpty 
+                                ? item['nama'].toString()[0].toUpperCase() 
+                                : '?',
+                          ),
+                        ),
                         title: Text(item['nama'] ?? ''),
                         subtitle: Text('${item['email']}\n${item['phone']}'),
                         isThreeLine: true,
