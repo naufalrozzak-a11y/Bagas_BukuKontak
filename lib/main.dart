@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -23,9 +24,6 @@ class BukuKontakApp extends StatelessWidget {
   }
 }
 
-// -----------------------------------------------------------------------------
-// HALAMAN UTAMA (Beranda: AppBar, Navigation Drawer, TabBar, TabBarView, FAB)
-// -----------------------------------------------------------------------------
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -33,7 +31,12 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
+// -----------------------------------------------------------------------------
+// HALAMAN UTAMA (Beranda: AppBar, Navigation Drawer, TabBar, TabBarView, FAB)
+// -----------------------------------------------------------------------------
 class _HomeScreenState extends State<HomeScreen> {
+  final StreamController<String> _searchController = StreamController<String>.broadcast();
+
   // List data kontak awal
   final List<Map<String, String>> _daftarKontak = [
     {
@@ -47,6 +50,12 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _daftarKontak.add({'nama': nama, 'email': email, 'phone': phone});
     });
+  }
+
+  @override
+  void dispose() {
+    _searchController.close();
+    super.dispose();
   }
 
   @override
@@ -111,45 +120,77 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
         ),
-        // TabBarView Content
+        // TabBarView Content dengan StreamBuilder untuk Pencarian (Tugas 6)
         body: TabBarView(
           children: [
-            // Tab 1: Kontak
-            _daftarKontak.isEmpty
-                ? const Center(child: Text('Belum ada kontak'))
-                : ListView.builder(
-                    itemCount: _daftarKontak.length,
-                    itemBuilder: (context, index) {
-                      final item = _daftarKontak[index];
-                      return ListTile(
-                        leading: CircleAvatar(
-                          child: Text(
-                            item['nama'] != null && item['nama'].toString().isNotEmpty 
-                                ? item['nama'].toString()[0].toUpperCase() 
-                                : '?',
-                          ),
-                        ),
-                        title: Text(item['nama'] ?? ''),
-                        subtitle: Text('${item['email']}\n${item['phone']}'),
-                        isThreeLine: true,
+            // Tab 1: Kontak (Dilengkapi Kolom Pencarian & StreamBuilder)
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    onChanged: (teks) {
+                      _searchController.add(teks);
+                    },
+                    decoration: const InputDecoration(
+                      labelText: 'Cari Kontak',
+                      prefixIcon: Icon(Icons.search),
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: StreamBuilder<String>(
+                    stream: _searchController.stream,
+                    initialData: '',
+                    builder: (context, snapshot) {
+                      final keyword = (snapshot.data ?? '').toLowerCase();
+                      final filteredKontak = _daftarKontak.where((kontak) {
+                        final nama = kontak['nama']?.toLowerCase() ?? '';
+                        return nama.contains(keyword);
+                      }).toList();
+
+                      if (filteredKontak.isEmpty) {
+                        return const Center(child: Text('Belum ada kontak'));
+                      }
+
+                      return ListView.builder(
+                        itemCount: filteredKontak.length,
+                        itemBuilder: (context, index) {
+                          final item = filteredKontak[index];
+                          return ListTile(
+                            leading: CircleAvatar(
+                              child: Text(
+                                item['nama'] != null && item['nama'].toString().isNotEmpty 
+                                    ? item['nama'].toString()[0].toUpperCase() 
+                                    : '?',
+                              ),
+                            ),
+                            title: Text(item['nama'] ?? ''),
+                            subtitle: Text('${item['email']}\n${item['phone']}'),
+                            isThreeLine: true,
+                          );
+                        },
                       );
                     },
                   ),
+                ),
+              ],
+            ),
+            
             // Tab 2: Favorit (Data Diri Kamu)
-            // ... kode di atasnya ...
-        ListTile(
-          leading: CircleAvatar(
-            child: Text('M'), 
-          ),
-          title: Text('M Naufal F'),
-          subtitle: Text('naufal@gmail.com\n081234567890'),
-          isThreeLine: true,
-        ), // <-- Temukan baris penutup ListTile ini
-      ], // <-- Tambahkan ini (Penutup array children dari baris 116)
-    ), // <-- Tambahkan ini (Penutup widget TabBarView)
-    
-    // floatingActionButton: FloatingActionButton(
-    // ... kode di bawahnya ...
+            const Center(
+              child: ListTile(
+                leading: CircleAvatar(
+                  child: Text('M'), 
+                ),
+                title: Text('M Naufal F'),
+                subtitle: Text('naufal@gmail.com\n081234567890'),
+                isThreeLine: true,
+              ),
+            ),
+          ],
+        ),
         // FloatingActionButton
         floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
