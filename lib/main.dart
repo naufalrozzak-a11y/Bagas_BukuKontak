@@ -136,20 +136,20 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                   ),
             // Tab 2: Favorit (Data Diri Kamu)
-            ListTile(
-              leading: CircleAvatar(
-              child: Text(
-                item['nama'] != null && item['nama'].toString().isNotEmpty 
-                    ? item['nama'].toString()[0].toUpperCase() 
-                    : '?',
-              ),
-            ),
-              title: Text('M Naufal F'),
-              subtitle: Text('naufal@gmail.com\n081234567890'),
-              isThreeLine: true,
-            ),
-            ], // Penutup array children
-        ),
+            // ... kode di atasnya ...
+        ListTile(
+          leading: CircleAvatar(
+            child: Text('M'), 
+          ),
+          title: Text('M Naufal F'),
+          subtitle: Text('naufal@gmail.com\n081234567890'),
+          isThreeLine: true,
+        ), // <-- Temukan baris penutup ListTile ini
+      ], // <-- Tambahkan ini (Penutup array children dari baris 116)
+    ), // <-- Tambahkan ini (Penutup widget TabBarView)
+    
+    // floatingActionButton: FloatingActionButton(
+    // ... kode di bawahnya ...
         // FloatingActionButton
         floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
